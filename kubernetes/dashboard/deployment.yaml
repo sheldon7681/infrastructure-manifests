@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: idm
+  labels:
+    app: dashboard
+    env: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: retoacr.azurecr.io/dashboard:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8501
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cnpg-credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cnpg-credentials
+                  key: password
+            - name: DB_NAME
+              value: app
+            - name: DB_HOST
+              value: cnpg-cluster-1.idm.svc.cluster.local
