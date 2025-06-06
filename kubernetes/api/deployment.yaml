@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: idm
+  labels:
+    app: api
+    env: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: retoacr.azurecr.io/api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8501
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          env:
+            - name: MLFLOW_TRACKING_URI
+              valueFrom: 
+                secretKeyRef:
+                  name: api
+                  key: MLFLOW_TRACKING_URI
+            - name: MLFLOW_TRACKING_USERNAME
+              valueFrom: 
+                secretKeyRef:
+                  name: api
+                  key: MLFLOW_TRACKING_USERNAME
+            - name: MLFLOW_TRACKING_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: api
+                  key: MLFLOW_TRACKING_PASSWORD
+            - name: AZURE_STORAGE_CONNECTION_STRING
+              valueFrom: 
+                secretKeyRef:
+                  name: api
+                  key: AZURE_STORAGE_CONNECTION_STRING

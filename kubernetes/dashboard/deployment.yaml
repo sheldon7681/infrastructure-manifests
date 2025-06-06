@@ -30,6 +30,8 @@ spec:
               memory: "2Gi"
               cpu: "1"
           env:
+            - name: BACKEND_BASE_URL
+              value: http://api.idm.svc.cluster.local
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
