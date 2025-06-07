@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: dashboard
-          image: retoacr.azurecr.io/dashboard:latest
+          image: retoacr.azurecr.io/dashboard:exp
           imagePullPolicy: Always
           ports:
             - containerPort: 8501
@@ -26,9 +26,6 @@ spec:
             requests:
               memory: "512Mi"
               cpu: "500m"
-            limits:
-              memory: "2Gi"
-              cpu: "1"
           env:
             - name: BACKEND_BASE_URL
               value: http://api.idm.svc.cluster.local
@@ -45,4 +42,4 @@ spec:
             - name: DB_NAME
               value: app
             - name: DB_HOST
-              value: cnpg-cluster-1.idm.svc.cluster.local
+              value: cnpg-cluster-rw.idm.svc.cluster.local
